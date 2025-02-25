@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>TreePlugin Demo</title>
+  <style>
+    /* Reset margins, padding, and ensure full viewport usage */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+    /* Container for the tree animation */
+    #treeContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(100% - 250px); /* Leave space for the controls panel */
+      height: 100%;
+      background: #fff;
+    }
+    /* Controls panel styling */
+    #controls {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100%;
+      padding: 20px;
+      background: #f0f0f0;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    /* Style for labels in the controls panel */
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-size: 14px;
+    }
+    /* Style for inputs and select elements */
+    input, select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 5px;
+      font-size: 14px;
+    }
+    /* Style for the redraw button */
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Container where the tree animation will be rendered -->
+  <div id="treeContainer"></div>
+  
+  <!-- Controls panel for adjusting TreePlugin options -->
+  <div id="controls">
+    <label>
+      Seed:
+      <input type="text" id="seed" value="12345">
+    </label>
+    <label>
+      Depth:
+      <input type="number" id="depth" value="11" min="1">
+    </label>
+    <label>
+      Growth Speed:
+      <input type="number" id="growthSpeed" value="50" step="1">
+    </label>
+    <label>
+      Tree Scale:
+      <input type="number" id="treeScale" value="1" step="0.1">
+    </label>
+    <label>
+      Branch Width:
+      <input type="number" id="branchWidth" value="1" step="0.1">
+    </label>
+    <label>
+      Color Mode:
+      <select id="colorMode">
+        <option value="gradient">Gradient</option>
+        <option value="solid">Solid</option>
+      </select>
+    </label>
+    <label>
+      Color (Solid Mode):
+      <input type="color" id="color" value="#000000">
+    </label>
+    <label>
+      Gradient Start:
+      <input type="color" id="gradientStart" value="#8B4513">
+    </label>
+    <label>
+      Gradient End:
+      <input type="color" id="gradientEnd" value="#228B22">
+    </label>
+    <button id="redraw">Redraw Tree</button>
+  </div>
+
+  <!-- Include the TreePlugin library -->
+  <script src="tree.js"></script>
+  <script>
+    // Global variable to hold the TreePlugin instance
+    var plugin;
+
+    // Function to read values from controls and create a new tree
+    function redrawTree() {
+      // Get the tree container element
+      var container = document.getElementById("treeContainer");
+      // Clear any existing tree by emptying the container's HTML
+      container.innerHTML = "";
+      
+      // Parse and retrieve values from the control inputs
+      var depth = parseInt(document.getElementById("depth").value, 10);
+      var growthSpeed = parseFloat(document.getElementById("growthSpeed").value);
+      var treeScale = parseFloat(document.getElementById("treeScale").value);
+      var branchWidth = parseFloat(document.getElementById("branchWidth").value);
+      var colorMode = document.getElementById("colorMode").value;
+      var color = document.getElementById("color").value;
+      var gradientStart = document.getElementById("gradientStart").value;
+      var gradientEnd = document.getElementById("gradientEnd").value;
+      var seed = document.getElementById("seed").value;
+      
+      // Create a new instance of TreePlugin with the provided options
+      plugin = new TreePlugin({
+        container: container,
+        depth: depth,
+        growthSpeed: growthSpeed,
+        treeScale: treeScale,
+        branchWidth: branchWidth,
+        colorMode: colorMode,
+        color: color,
+        gradientStart: gradientStart,
+        gradientEnd: gradientEnd,
+        seed: seed,
+      });
+    }
+
+    // Add event listener to the redraw button to recreate the tree on click
+    document.getElementById("redraw").addEventListener("click", redrawTree);
+    
+    // Automatically draw the tree when the page loads
+    redrawTree();
+  </script>
+</body>
+</html>
